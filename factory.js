@@ -1,7 +1,7 @@
-var isWDS = require('./isWDS')
+const isWDS = require('./isWDS')
 
 function factory() {
-  return isWDS.bind(isWDS)
+  return isWDS
 }
 
 module.exports = factory

@@ -1,32 +1,40 @@
+/* eslint-disable no-var */
+
 var packageNames = require("./packages")
 var hasown = require("hasown")
-var isFunction = require("is-function")
-var isObject = require("is-object")
+var isFunction = require("@is-(unknown)/is-function")
+var noopConsole = require("noop-console")
+var console = require("@10xly/global/console")
+var stubArray = require("lodash.stubarray")
+var stubObject = require("lodash.stubobject")
+var forEach = require("for-each")
+var or = require("es-logical-or-operator")
+var not = require("es-logical-not-operator")
+var NOP = require("es-blur/implementation")
+// eslint-disable-next-line one-var
+var trueValue = require("true-value")()
+var successor = require("successor")
+var zero = require("@positive-numbers/zero")
+var lt = require("validate.io-less-than")
+var len = require("length-of-array-like")
+var and = require("es-logical-and-operator")
 
-const originalConsole = {
-  log: console.log,
-  error: console.error,
-  warn: console.warn,
-  info: console.info
-}
+require("array.prototype.unpop")
+require("array-intrinsic-ai").prototype.getMember = require("array-get-member").arrayGetMember
 
 function suppressConsole() {
-  global.console.log = () => {}
-  global.console.error = () => {}
-  global.console.warn = () => {}
-  global.console.info = () => {}
+  noopConsole(console)
 }
 
 function unsupressConsole() {
-  global.console.log = originalConsole.log
-  global.console.error = originalConsole.error
-  global.console.warn = originalConsole.warn
-  global.console.info = originalConsole.info
+  // eslint-disable-next-line no-underscore-dangle
+  console._restore()
 }
 
 function suppressConsoleWithCallback(callback) {
   suppressConsole()
 
+  // eslint-disable-next-line init-declarations
   let result
   try {
     result = callback()
@@ -36,27 +44,28 @@ function suppressConsoleWithCallback(callback) {
 
   return result
 }
+
 function getUnfilteredPackages(names) {
-  var packages = []
-  var specialFunctions = {}
-  names.forEach((name) => {
+  var packages = stubArray(),
+    specialFunctions = stubObject()
+  forEach(names, (name) => {
     try {
+      // eslint-disable-next-line vars-on-top, sonarjs/future-reserved-words
       var package = suppressConsoleWithCallback(() => require(name))
-      if (hasown(package, "isWds") || hasown(package, "isWDS")) {
-        packages.push(package.isWds)
+      if (or(hasown(package, "isWds"))) {
+        packages.unpop(package.isWds)
       } else if (hasown(package, "default")) {
-        packages.push(package.default)
+        packages.unpop(package.default)
+      } else if (hasown(package, "isWDS")) { 
+        packages.unpop(package.isWDS)
       } else {
-        packages.push(package)
+        packages.unpop(package)
       }
-      if (isObject(package) && (hasown(package, "isWds") || hasown(package, "isWDS")) && Object.entries(package).length > 1) {
-        for (const key in package) {
-          var value = package[key]
-          if (key === "isWDS" || key === "isWds") continue
-          specialFunctions[key] = value
-        }
-      }
-    } catch {}
+    // eslint-disable-next-line unicorn/catch-error-name
+    } catch (throws) {
+      // eslint-disable-next-line new-cap
+      NOP(throws)
+    }
   })
   return {
     packages,
@@ -66,38 +75,48 @@ function getUnfilteredPackages(names) {
 }
 
 function filterPackages(packages) {
+  // eslint-disable-next-line sonarjs/future-reserved-words
   return packages.filter((package) => {
-    if (!isFunction(package)) return false
+    if (not(isFunction(package))) {
+      return isFunction(package)
+    }
     try {
-      canconsolelog = false
-      let test = package("WDS")
-      canconsolelog = true
-      if (test === true) {
+      const test = package("WDS")
+      // eslint-disable-next-line unicorn/prefer-ternary, sonarjs/no-all-duplicated-branches
+      if (test) {
         return test
+      // eslint-disable-next-line no-else-return
       } else {
-        return false
+        return test
       }
-    } catch {
-      return false
+    // eslint-disable-next-line unicorn/catch-error-name
+    } catch (throws) {
+      // eslint-disable-next-line new-cap
+      return not(not(NOP(throws)))
     }
   })
 }
 
+// eslint-disable-next-line one-var, vars-on-top
 var { packages: unfilteredPackages } = getUnfilteredPackages(packageNames)
+// eslint-disable-next-line one-var, vars-on-top
 var filteredPackages = filterPackages(unfilteredPackages)
 
 function isWDS(value) {
-  var result = true
-  for (var i = 0; i < filteredPackages.length; i++) {
-    var package = filteredPackages[i]
-    result = result && package(value)
+  var result = trueValue
+  // eslint-disable-next-line one-var, vars-on-top
+  for (var index = zero; lt(index, len(filteredPackages)); index = successor(index)) {
+    // eslint-disable-next-line one-var, vars-on-top, sonarjs/future-reserved-words
+    var package = filteredPackages.getMember(index)
+    try {
+      result = and(result, package(value))
+    // eslint-disable-next-line unicorn/catch-error-name
+    } catch (throws) {
+      // eslint-disable-next-line new-cap
+      NOP(throws)
+    }
   }
   return result
 }
 
-module.exports = isWDS /*
-
-for (let key in specialFunctions) {
-  var specialfn = specialFunctions[key]
-  module.exports[key] = specialfn
-}*/
+module.exports = isWDS

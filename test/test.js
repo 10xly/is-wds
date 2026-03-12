@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const assert = require('assert')
 const esValueFixtures = require('es-value-fixtures')
 const concatArrays = require('array-concat')
