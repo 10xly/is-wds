@@ -21,7 +21,9 @@
     "all-the-package-names": "^2.0.2154",
     "assert-fn": "^1.0.1",
     "es-value-fixtures": "^1.7.1",
-    "mocha": "^11.7.1"
+    "mocha": "^11.7.1",
+    "@10xly/eslint-config": "*",
+    "eslint": "^9.39.3"
   },
   "dependencies": {
     "@abdoaitwihi/is-wds": "^1.0.0",
