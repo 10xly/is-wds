@@ -1,6 +1,6 @@
 {
   "name": "@overkill/is-wds",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "Is this string REALLY \"WDS\"?",
   "homepage": "https://github.com/is-unknown/is-wds#readme",
   "bugs": {
