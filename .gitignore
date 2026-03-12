@@ -2,3 +2,4 @@ isWdsPackages.js
 node_modules
 .vscode
 stfbank
+package-lock.json
