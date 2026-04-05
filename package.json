@@ -18,7 +18,7 @@
     "test": "mocha"
   },
   "devDependencies": {
-    "@10xly/eslint-config": "1.0.6",
+    "@10xly/eslint-config": "1.0.7",
     "all-the-package-names": "^2.0.2154",
     "assert-fn": "^1.0.1",
     "es-value-fixtures": "^1.7.1",
